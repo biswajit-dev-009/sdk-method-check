@@ -19,6 +19,7 @@ const Builder = () => {
   const [method, setMethod] = useState('');
   const [apiResponse, setApiResponse] = useState<any>();
   const [services, setServices] = useState<string[]>([]);
+  const [methods, setMethods] = useState<string[]>([]);
 
   const handleClearForm = () => {
     setApiResponse('');
@@ -41,16 +42,22 @@ const Builder = () => {
 
   useEffect(() => {
     if (!sdk?.services) {
-      setServices([])
+      setServices([]);
       return;
-    };
+    }
     setServices(Object.keys(sdk?.services));
   }, [sdk]);
+
+  useEffect(() => {
+    if (!service) return;
+    const methods = Object.keys(sdk?.services[service]);
+    setMethods(methods);
+  }, [service, sdk]);
 
   const handleSendRequest = async () => {
     try {
       const services = sdk?.services[service];
-      console.log('🚀 ~ handleSDK ~ error:', services, apiData);
+      console.log('🚀 ~ handleSDK ~ data:', services, apiData);
       if (services) {
         const resp = await services[method](apiData ? JSON.parse(apiData) : {});
 
@@ -74,11 +81,10 @@ const Builder = () => {
           />
         </div>
         <div className='mt-5 mb-3 w-96'>
-          <Input
-            handleChange={(e) => setMethod(e.target.value)}
-            label='Please enter method name'
-            value={method}
-            placeholder='eg: fetchUsers'
+          <Select
+            label='Please choose Service'
+            data={methods}
+            handleSelectedValue={(val) => setMethod(val)}
           />
         </div>
         <div className='mb-24 w-96 h-60'>
