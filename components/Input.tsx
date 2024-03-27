@@ -30,7 +30,6 @@ const Input: React.FC<InputProps> = ({
           value={value}
           onChange={handleChange}
           className='w-full p-2 text-gray-700 text-base h-full'
-          defaultValue={value}
         />
       ) : (
         <input
