@@ -50,7 +50,8 @@ const Builder = () => {
 
   useEffect(() => {
     if (!service) return;
-    const methods = Object.keys(sdk?.services[service]);
+
+    const methods = Object.getOwnPropertyNames(sdk?.services[service].__proto__);
     setMethods(methods);
   }, [service, sdk]);
 
